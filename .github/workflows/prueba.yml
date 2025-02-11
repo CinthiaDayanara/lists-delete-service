@@ -49,7 +49,7 @@ jobs:
               --env DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
               --env DB_SERVER=${{ secrets.DB_HOST }} \
               --env DB_NAME=${{ secrets.DB_NAME }} \
-              -p 5004:5004 \
+              -p 5003:5003 \
               ${{ secrets.DOCKER_USERNAME }}/lists-delete-service:latest
 
             echo "✅ Despliegue completado con éxito."
