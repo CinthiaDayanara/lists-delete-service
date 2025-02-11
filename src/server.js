@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const listRoutes = require("../routes/listsDeleteRoutes");
+const listRoutes = require("./routes/listsDeleteRoutes");
 
 const app = express();
 app.use(express.json());
