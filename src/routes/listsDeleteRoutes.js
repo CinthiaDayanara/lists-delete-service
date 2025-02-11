@@ -1,5 +1,5 @@
 const express = require('express');
-const { deleteList } = require('../controllers/listsController');
+const { deleteList } = require('../controllers/listsDeleteController');
 
 const router = express.Router();
 
