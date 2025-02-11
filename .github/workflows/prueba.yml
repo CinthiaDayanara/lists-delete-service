@@ -1,9 +1,10 @@
-name: Deploy Delete List Service to AWS EC2
+name: Deploy to AWS EC2
 
 on:
   push:
     branches:
-      - test  # Cambia si de
+      - test  # Cambia a "test" si deseas que se ejecute
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -29,40 +30,28 @@ jobs:
           script: |
             echo "🚀 Actualizando microservicio en AWS EC2.."
 
-            # Verificar si Docker está instalado y corriendo
-            if ! command -v docker &> /dev/null
-            then
-                echo "🐳 Docker no está instalado. Instalándolo..."
-                sudo yum update -y || sudo apt update -y
-                sudo yum install -y docker || sudo apt install -y docker.io
-                sudo systemctl enable docker
-                sudo systemctl start docker
-                sudo usermod -aG docker $USER
-            fi
-
             # Detener y eliminar el contenedor si ya existe
-            if sudo docker ps -a --format '{{.Names}}' | grep -q lists-delete-service-container; then
+            if sudo docker ps -a --format '{{.Names}}' | grep -q lists-delete-service_container; then
               echo "🛑 Deteniendo y eliminando contenedor existente..."
-              sudo docker stop lists-delete-service-container
-              sudo docker rm lists-delete-service-container
+              sudo docker stop lists-delete-service_container
+              sudo docker rm lists-delete-service_container
             fi
 
             # Limpiar imágenes antiguas
-            echo "🧹 Eliminando imágenes antiguas..."
             sudo docker image prune -af || true
 
             # Descargar la última versión de la imagen desde Docker Hub
-            echo "📥 Descargando nueva imagen..."
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/lists-delete-service:latest
 
-            # Ejecutar el nuevo contenedor con las variables de entorno
-            echo "🚀 Iniciando nuevo contenedor..."
-            sudo docker run -d --name lists-delete-service-container \
+            # Ejecutar el nuevo contenedor
+            sudo docker run -d --name lists-delete-service_container \
               --env DB_USER=${{ secrets.DB_USER }} \
               --env DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-              --env DB_HOST=${{ secrets.DB_HOST }} \
+              --env DB_SERVER=${{ secrets.DB_HOST }} \
               --env DB_NAME=${{ secrets.DB_NAME }} \
-              -p 5003:5003 \
+              -p 5004:5004 \
               ${{ secrets.DOCKER_USERNAME }}/lists-delete-service:latest
 
             echo "✅ Despliegue completado con éxito."
+
+          
