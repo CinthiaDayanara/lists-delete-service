@@ -3,8 +3,7 @@ name: Deploy Delete List Service to AWS EC2
 on:
   push:
     branches:
-      - test  # Cambia si deseas que secute en otra rama
-
+      - test  # Cambia si de
 jobs:
   deploy:
     runs-on: ubuntu-latest
