@@ -1,8 +1,9 @@
-const express = require("express");
-const { deleteList } = require("../controllers/listsDeleteController");
+const express = require('express');
+const { deleteList } = require('../controllers/listsController');
 
 const router = express.Router();
 
-router.delete("/:id", deleteList);
+// Ruta para eliminar una lista
+router.delete('/lists/:id', deleteList);
 
 module.exports = router;

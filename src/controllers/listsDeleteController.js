@@ -1,18 +1,19 @@
-const List = require("../models/List");
+const List = require('../models/List');
 
-// Eliminar lista por ID
-exports.deleteList = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const list = await List.findByPk(id);
+const deleteList = async (req, res) => {
+    const { id } = req.params; // Obtener el ID desde la URL
 
-    if (!list) {
-      return res.status(404).json({ message: "Lista no encontrada" });
+    try {
+        const deletedList = await List.deleteList(id);
+
+        if (!deletedList) {
+            return res.status(404).json({ message: "❌ Lista no encontrada" });
+        }
+
+        res.json({ message: "✅ Lista eliminada correctamente", deletedList });
+    } catch (error) {
+        res.status(500).json({ message: "❌ Error al eliminar la lista", error: error.message });
     }
-
-    await list.destroy();
-    res.status(200).json({ message: "Lista eliminada exitosamente" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
 };
+
+module.exports = { deleteList };

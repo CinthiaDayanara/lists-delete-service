@@ -1,13 +1,14 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
+const pool = require('../config/database');
 
-const List = sequelize.define("List", {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  board_id: { type: DataTypes.INTEGER, allowNull: false },
-  name: { type: DataTypes.STRING, allowNull: false },
-  position: { type: DataTypes.INTEGER, allowNull: false },
-}, {
-  timestamps: false
-});
+const List = {
+    async deleteList(id) {
+        try {
+            const result = await pool.query('DELETE FROM listas WHERE id = $1 RETURNING *', [id]);
+            return result.rows[0]; // Retorna la lista eliminada
+        } catch (error) {
+            throw error;
+        }
+    }
+};
 
 module.exports = List;
